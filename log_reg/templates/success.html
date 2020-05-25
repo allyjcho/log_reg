@@ -3,12 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Success</title>
+    <title>Wall</title>
 </head>
 <body>
     <h1>Hello {{ request.session.name }}! Welcome to the success page!</h1>
     <h2>You have successfully logged in!</h2>
 
+    <h3>Post a Message</h2>
+
+    <form action="/create_msg" method=POST>
+        {% csrf_token %}
+    <input type="text" name="message">
+    <input type="submit" value="Submit">
+    </form>
+
     <a href="/logout">Log Out</a>
+
+    {% for msg in all_messages %}
+    <div>
+        <p>Posted At: {{msg.created_at}}</p>
+        <p>Posted By: {{msg.poster.first_name}} {{msg.poster.last_name}}</p>
+        <p>Message: {{msg.message}}</p>
+
+        <form action="/create_cmt/{{msg.id}}" method=POST>
+            {% csrf_token %}
+        <input type="text" name="cmt">
+        <input type="submit" value="Post Comment">
+        </form>
+
+    </div>
+    {% endfor %}
+
 </body>
 </html>
